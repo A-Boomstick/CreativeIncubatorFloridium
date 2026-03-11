@@ -64,22 +64,26 @@ app.post("/login", async (req, res) => {
 
     const user = await users.checkUser(username, password);
 
-    if (user) {
-      req.session.username = user.username;
-      req.session.userId = user._id;
-
-      return res.json({
-        success: true,
-        userId: user._id,
-        username: user.username,
-      });
+    if (!user) {
+      return res.send("Invalid username or password");
     }
 
-    return res.sendFile(path.join(__dirname, "views", "notloggedin.html"));
+    req.session.username = user.username;
+    req.session.userId = user._id;
+
+    return res.redirect("/homepage");
   } catch (err) {
     console.log("Login error:", err);
     res.status(500).send("Error logging in");
   }
+});
+
+app.get("/homepage", (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
+  res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
 
 // Optional homepage test route
