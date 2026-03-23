@@ -86,6 +86,10 @@ app.get("/homepage", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
 
+app.get("/aboutUs", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "aboutUs.html"));
+});
+
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");
