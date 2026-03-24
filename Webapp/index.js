@@ -86,6 +86,33 @@ app.get("/homepage", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
 
+// creating a connection to the test user
+const testUser = mongoose.createConnection("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/userJeff?retryWrites=true&w=majority");
+
+// storing the plant data
+const plantData = new mongoose.Schema({
+    Sunlight: [Number],
+    Moisture: [Number],
+    Temprature: [Number],
+    DateStart: String 
+}, { collection: 'plantPotOne' });
+
+const PlantModel = testUser.model('Plant', plantData);
+
+app.get("/plantsOwned", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "plantsOwned.html"));
+});
+
+app.get("/api/plants", async (req, res) => {
+    try {
+        const plants = await PlantModel.find({});
+        res.json(plants); 
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        res.status(500).json({ error: "Failed to fetch plants" });
+    }
+});
+
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");

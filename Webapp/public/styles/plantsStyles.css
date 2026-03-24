@@ -80,6 +80,11 @@ h2 {
     font-size: 220%;
 }
 
+.PlantDetails h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 button {
     background-color: #d4edda;
     border: 1px solid black;
