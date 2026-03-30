@@ -33,7 +33,7 @@ const renderPlants = async () => {
                     <div class="PlantDetails">
                         <div class="PlantTitle">
                         <h2>PLANT ${index + 1}</h2>
-                        <button><img src="Assets/history.png" alt=""></button>
+                        <button id=${plant._id}><img src="Assets/history.png" alt=""></button>
                         </div>
                         <h3>ID: ${plant._id} </h3>
                         <p><strong>Sunlight:</strong> ${latestSun} units</p>
@@ -54,3 +54,15 @@ const renderPlants = async () => {
 };
 
 renderPlants();
+
+const PlantList = document.getElementById("plant-list");
+
+PlantList.addEventListener("click", (event) => {
+    const HistoryBTN = event.target.closest('button');
+
+    if (HistoryBTN) {
+        const PlantID = HistoryBTN.id
+        console.log(PlantID)
+        window.location.href = `/history?id=${PlantID}`;
+    }
+})

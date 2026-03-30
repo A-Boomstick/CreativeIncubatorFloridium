@@ -117,6 +117,26 @@ app.get("/api/plants", async (req, res) => {
     }
 });
 
+// route to plant history
+app.get("/history", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "history.html"));
+});
+
+app.get("/api/plants/:id", async (req, res) => {
+  try {
+    const plant = await PlantModel.findById(req.params.id);
+
+    if (!plant) {
+      return res.status(404).json({ error: "Plant not found" });
+    }
+
+    res.json(plant);
+  } catch (err) {
+    console.error("Fetch plant error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");
