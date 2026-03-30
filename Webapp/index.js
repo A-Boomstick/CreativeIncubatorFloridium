@@ -95,7 +95,11 @@ const plantData = new mongoose.Schema({
     Moisture: [Number],
     Temprature: [Number],
     DateStart: String 
-}, { collection: 'plantPotOne' });
+}, { 
+    collection: 'plantPotOne',
+    toJSON: { virtuals: true }, 
+    toObject: { virtuals: true }
+});
 
 const PlantModel = testUser.model('Plant', plantData);
 

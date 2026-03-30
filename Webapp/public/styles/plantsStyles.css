@@ -85,6 +85,30 @@ h2 {
     margin-bottom: 20px;
 }
 
+.PlantTitle {
+    display: grid;
+    grid-template-columns: 8fr 1fr;
+}
+
+.PlantTitle img {    
+    width: 25px;
+    height: 25px;
+}
+
+.PlantTitle button {
+    width: 0px;
+    height: 0px;
+    padding: 0;
+    background-color: transparent;
+    border: 0px;
+    box-shadow: none;
+}
+
+.PlantTitle button:hover {
+    background-color: transparent;
+    box-shadow: none;
+}
+
 button {
     background-color: #d4edda;
     border: 1px solid black;
