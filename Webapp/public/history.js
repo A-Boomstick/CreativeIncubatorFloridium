@@ -36,9 +36,13 @@ const loadPlantHistory = async () => {
             temperatureChart.destroy();
         }
 
-        const idealMoisture = 68;
-        const idealSunlight = 30;
-        const idealTemperature = 20
+        // temp stats
+        const idealMoistureUpper = 70;
+        const idealMoistureLower = 40;
+        const idealTemperatureUpper = 24;
+        const idealTemperatureLower = 15;
+        const idealSunlightUpper = 60;
+        const idealSunlightLower = 50;
 
         sunlightChart = new Chart(Sctx, {
             type: 'line',
@@ -54,8 +58,17 @@ const loadPlantHistory = async () => {
                         tension: 0.3
                     },
                     {
-                        label: "Ideal Sunlight",
-                        data: plant.Sunlight.map(() => idealSunlight),
+                        label: "Ideal Sunlight Upper bounds",
+                        data: plant.Sunlight.map(() => idealSunlightUpper),
+                        borderColor: "#1b9e26",
+                        backgroundColor: "#1b9e26",
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0
+                    },
+                    {
+                        label: "Ideal Sunlight Lower bounds",
+                        data: plant.Sunlight.map(() => idealSunlightLower),
                         borderColor: "#1b9e26",
                         backgroundColor: "#1b9e26",
                         borderDash: [5, 5],
@@ -87,8 +100,17 @@ const loadPlantHistory = async () => {
                         tension: 0.3
                     },
                     {
-                        label: "Ideal Moisture",
-                        data: plant.Moisture.map(() => idealMoisture),
+                        label: "Ideal Moisture Upper Bounds",
+                        data: plant.Moisture.map(() => idealMoistureUpper),
+                        borderColor: "#1b9e26",
+                        backgroundColor: "#1b9e26",
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0
+                    },
+                    {
+                        label: "Ideal Moisture Lower Bounds",
+                        data: plant.Moisture.map(() => idealMoistureLower),
                         borderColor: "#1b9e26",
                         backgroundColor: "#1b9e26",
                         borderDash: [5, 5],
@@ -120,8 +142,17 @@ const loadPlantHistory = async () => {
                         tension: 0.3
                     },
                     {
-                        label: "Ideal temperature",
-                        data: plant.Temprature.map(() => idealTemperature),
+                        label: "Ideal temperature Upper bounds",
+                        data: plant.Temprature.map(() => idealTemperatureUpper),
+                        borderColor: "#1b9e26",
+                        backgroundColor: "#1b9e26",
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0
+                    },
+                    {
+                        label: "Ideal temperature Lower bounds",
+                        data: plant.Temprature.map(() => idealTemperatureLower),
                         borderColor: "#1b9e26",
                         backgroundColor: "#1b9e26",
                         borderDash: [5, 5],

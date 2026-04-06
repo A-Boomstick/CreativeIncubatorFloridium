@@ -86,6 +86,14 @@ app.get("/homepage", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
 
+app.get("/HomepageLink", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "homepage.html"));
+});
+
+app.get("/AboutUs", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
+});
+
 // creating a connection to the test user
 const testUser = mongoose.createConnection("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/userJeff?retryWrites=true&w=majority");
 

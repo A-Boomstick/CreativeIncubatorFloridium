@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +9,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="history.js" defer></script>
 </head>
+
 <body>
-    <canvas id="SunlightChart"></canvas>
-    <canvas id="MoistureChart"></canvas>
-    <canvas id="TemperatureChart"></canvas>
+    <header>
+        <section id="titleStrip">
+            <img src="Assets/721a75ada244b9bd4b43b76c9a256412f598e1f7.jfif" alt="">
+            <h1>
+                FLORIDIUM - Plants
+            </h1>
+            <a href="HomepageLink">
+                <button id="logoutBTN">Logout</button>
+            </a>
+        </section>
+        <section id="nav">
+            <a href="HomepageLink">
+                <button id="HomeBTN">Home</button>
+            </a>
+            <a href="AboutUs">
+                <button id="AboutUsBTN">About us</button>
+            </a>
+            <a href="plantsOwned">
+                <button id="YourPlantsBTN">Your plants</button>
+            </a>
+        </section>
+    </header>
+    <main>
+        <a href="plantsOwned">
+                <button id="YourPlantsBTN">
+                    <img src="Assets/back-arrow.png" alt="">
+                </button>
+            </a>
+        <h2>Sunlight</h2>
+        <canvas id="SunlightChart"></canvas>
+        <h2>Moisture</h2>
+        <canvas id="MoistureChart"></canvas>
+        <h2>Temperature</h2>
+        <canvas id="TemperatureChart"></canvas>
+    </main>
 </body>
+
 </html>

@@ -1,16 +1,21 @@
-const testdata = { // temp database
-    plant_1: {
-        moisture: "High",
-        SoilHealth: "Good",
-        Sunlight: "Partial",
-        waterLevel: "Empty"
-    },
-    plant_2: {
-        moisture: "Low",
-        SoilHealth: "Excellent",
-        Sunlight: "Full",
-        waterLevel: "Full"
-    }
+// temp stats
+const idealMoistureUpper = 70;
+const idealMoistureLower = 40;
+const idealTemperatureUpper = 24;
+const idealTemperatureLower = 15
+const idealSunlightUpper = 60;
+const idealSunlightLower = 50;
+
+const inRange = (value, lower, upper) => value >= lower && value <= upper;
+
+const getStatusIcon = (value, lower, upper) => {
+    const ok = inRange(value, lower, upper);
+
+    return {
+        src: "Assets/like.png",
+        className: ok ? "thumb-up" : "thumb-down",
+        alt: ok ? "Within ideal range" : "Outside ideal range"
+    };
 };
 
 const renderPlants = async () => {
@@ -27,18 +32,38 @@ const renderPlants = async () => {
             const latestSun = plant.Sunlight[plant.Sunlight.length - 1];
             const latestTemp = plant.Temprature[plant.Temprature.length - 1];
 
+            const moistureStatus = getStatusIcon(latestMoisture, idealMoistureLower, idealMoistureUpper);
+            const sunlightStatus = getStatusIcon(latestSun, idealSunlightLower, idealSunlightUpper);
+            const tempStatus = getStatusIcon(latestTemp, idealTemperatureLower, idealTemperatureUpper);
+
             output += `
                 <section class="PlantContainer">
                     <img src="Assets/721a75ada244b9bd4b43b76c9a256412f598e1f7.jfif" alt="Plant Image">
                     <div class="PlantDetails">
                         <div class="PlantTitle">
-                        <h2>PLANT ${index + 1}</h2>
-                        <button id=${plant._id}><img src="Assets/history.png" alt=""></button>
+                            <h2>PLANT ${index + 1}</h2>
+                            <button id="${plant._id}">
+                                <img src="Assets/history.png" alt="">
+                            </button>
                         </div>
-                        <h3>ID: ${plant._id} </h3>
-                        <p><strong>Sunlight:</strong> ${latestSun} units</p>
-                        <p><strong>Moisture:</strong> ${latestMoisture}%</p>
-                        <p><strong>Temperature:</strong> ${latestTemp}°C</p>
+
+                        <h3>ID: ${plant._id}</h3>
+
+                        <p>
+                            <strong>Sunlight:</strong> ${latestSun} units
+                            <img src="${sunlightStatus.src}" alt="${sunlightStatus.alt}" class="status-icon ${sunlightStatus.className}">
+                        </p>
+
+                        <p>
+                            <strong>Moisture:</strong> ${latestMoisture}%
+                            <img src="${moistureStatus.src}" alt="${moistureStatus.alt}" class="status-icon ${moistureStatus.className}">
+                        </p>
+
+                        <p>
+                            <strong>Temperature:</strong> ${latestTemp}°C
+                            <img src="${tempStatus.src}" alt="${tempStatus.alt}" class="status-icon ${tempStatus.className}">
+                        </p>
+
                         <p><strong>Started:</strong> ${plant.DateStart}</p>
                     </div>
                 </section>
