@@ -114,8 +114,11 @@ void postRequest() {
     http.addHeader("Content-Type", "application/json");
 
     String json = R"({
-      "box_id": "TEST123",
-      "event": "data!"
+      "box_id": "Floridium01",
+      "Soil Moisture": "data",
+      "Temprature": "data",
+      "Humidity": "data",
+      "Sunlight": "data"
     })";
 
     int httpResponseCode = http.POST(json);
@@ -156,7 +159,6 @@ void setup() {
   Serial.begin(115200);
 
   prefrences.begin("wifi", false);
-  prefrences.remove(numberOfAttemptsToConnect);
   prefrences.end();
 
   //load / set up prefrences = uses "" ONLY if empty already
@@ -180,13 +182,14 @@ void setup() {
   int attempts = 0;
   while (WiFi.status() != WL_CONNECTED && attempts < 20) {
     delay(500);
-    Serial.print(".") #attempts++;
+    Serial.print(".");
+    attempts++;
   }
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.print("Connected to network!");
 
-      //create a task to run on core 0
+      //create a task to run on core 0 - this keeps the post requests running seperate from the wifi setup. 
       xTaskCreatePinnedToCore(
         POSTTaskcode,
         "POSTTask",
@@ -198,8 +201,8 @@ void setup() {
 
 
   } else {
-    Serial.print("Not connected to network")
-      APMode();
+    Serial.print("Not connected to network");
+    APMode();
   }
 }
 
