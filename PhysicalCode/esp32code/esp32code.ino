@@ -46,7 +46,7 @@ static const String htmlPage = R"===(
         let password = document.getElementById("password").value;
 
         //fetch request parsing the ssid and password data
-        fetch("/save?ssid=${ssid}&password=${password}")
+        fetch(`/save?ssid=${ssid}&password=${password}`)
           .then(res => res.text())
           .then(data => {
             document.body.innerHTML = data;
@@ -57,43 +57,42 @@ static const String htmlPage = R"===(
 </html>
 )===";
 
-void handleRoot(){
+void handleRoot() {
   // serve web page
   server.send(200, "text/html", htmlPage);
 }
 
-void handleSaved(){
+void handleSaved() {
   //when ssid and pass are saved
-  
+
   //recieve the data that was sent from html file
   ssid = server.arg("ssid");
   password = server.arg("password");
 
   //save data to prefrences
-  prefrences.begin("wifi", true);
-  ssid =  prefrences.getString("ssid", ssid);
-  password =  prefrences.getString("password", password);
+  prefrences.begin("wifi", false);
+  prefrences.putString("ssid", ssid);
+  prefrences.putString("password", password);
   prefrences.end();
 
   server.send(200, "text/html", "You have saved a network!");
 
   shouldRestart = true;
-
 }
 
-void handleNotFound(){
+void handleNotFound() {
   //if a route isnt / or /save, send it to (/)
   server.sendHeader("Location", "/");
   server.send(302, "text/plain", "redirect tp captive portal");
 }
 
 
-void APMode(){
+void APMode() {
 
-  //starts wifi with 
+  //starts wifi with
   WiFi.softAP("FloridiumSetup");
-  
-  //start the dns server 
+
+  //start the dns server
   dnsServer.start(DNS_PORT, "*", WiFi.softAPIP());
 
   server.on("/", handleRoot);
@@ -108,41 +107,62 @@ void APMode(){
   // Serial.print(WiFi.softAPIP());
 }
 
+void postRequest() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin("https://the-tarot-archive-box.onrender.com/data");
+    http.addHeader("Content-Type", "application/json");
 
-void POSTTaskcode(void * parameter){
-  for(;;){ //infinite loop 
-    if(WiFi.status() == WL_CONNECTED){
-      postRequest();
+    String json = R"({
+      "box_id": "TEST123",
+      "event": "data!"
+    })";
 
+    int httpResponseCode = http.POST(json);
+
+    
+    Serial.print("Response: ");
+    Serial.println(httpResponseCode);
+
+    if (httpResponseCode == -11){
+      delay(5000);
+      httpResponseCode = http.POST(json);
     }
-    else{
-      Serial.print("Can't connect to the network! POST request not sent")
-      // prefrences.begin("wifi", true);
-      // numberOfAttemptsToConnect =  prefrences.getString("numberOfAttemptsToConnect", ssid);
-      // prefrences.end();
 
-      // if (numberOfAttemptsToConnect > 3){
-      //   APMode();
-      // }
-    }
-
-    //delay for an hour
-    vTaskDelay(3600000 )
+    http.end();
+  } 
+  else {
+    Serial.print("Couldn't connect to the network!");
   }
 }
 
 
-void setup(){
+void POSTTaskcode(void* parameter) {
+  for (;;) {  //infinite loop
+    if (WiFi.status() == WL_CONNECTED) {
+      postRequest();
+
+    } else {
+      Serial.print("Can't connect to the network! POST request not sent");
+    }
+
+    //delay for an hour
+    vTaskDelay(3600000 / portTICK_PERIOD_MS);
+  }
+}
+
+
+void setup() {
   Serial.begin(115200);
 
-  prefrences.begin("wifi", false);  // must be RW mode
-  prefrences.remove(numberOfAttemptsToConnect)
+  prefrences.begin("wifi", false);
+  prefrences.remove(numberOfAttemptsToConnect);
   prefrences.end();
 
   //load / set up prefrences = uses "" ONLY if empty already
   prefrences.begin("wifi", true);
-  ssid =  prefrences.getString("ssid", "");
-  password =  prefrences.getString("password", "");
+  ssid = prefrences.getString("ssid", "");
+  password = prefrences.getString("password", "");
   prefrences.end();
 
   Serial.print("current SSID saved: ");
@@ -158,31 +178,28 @@ void setup(){
   WiFi.begin(ssid, password);
 
   int attempts = 0;
-  while (WiFi.status() != WL_CONNECTED && attempts < 20){
+  while (WiFi.status() != WL_CONNECTED && attempts < 20) {
     delay(500);
-    Serial.print(".")#
-    attempts++;
+    Serial.print(".") #attempts++;
   }
 
-  if(WiFi.status() == WL_CONNECTED){
-    Serial.print("Connected to network!")
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print("Connected to network!");
 
-    //create a task to run on core 0
-    xTaskCreatePinnedToCore(
-      POSTTaskcode,     
-      "POSTTask",   
-       10000,         
-      NULL,
-      1,            
-      NULL,
-      0             
-    );
-  
+      //create a task to run on core 0
+      xTaskCreatePinnedToCore(
+        POSTTaskcode,
+        "POSTTask",
+        10000,
+        NULL,
+        1,
+        NULL,
+        0);
 
-  } 
-  else{
+
+  } else {
     Serial.print("Not connected to network")
-    APMode();
+      APMode();
   }
 }
 
@@ -196,8 +213,7 @@ void loop() {
   }
 
   //restart esp as a network has been saved
-  if(shouldRestart){
+  if (shouldRestart) {
     ESP.restart();
   }
-
 }
