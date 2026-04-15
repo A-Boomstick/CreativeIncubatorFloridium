@@ -110,7 +110,7 @@ void APMode() {
 void postRequest() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    http.begin("https://the-tarot-archive-box.onrender.com/data");
+    http.begin("https://creativeincubatorfloridium.onrender.com/data");
     http.addHeader("Content-Type", "application/json");
 
     String json = R"({
