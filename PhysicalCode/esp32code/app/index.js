@@ -2,11 +2,13 @@ const express = require("express");
 const path = require("path");
 const app = express();
 
+require('dotenv').config();
+
 app.use(express.json());
 
 
 const mongoose = require("mongoose");
-mongoose.connect("+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/floridium?retryWrites=true&w=majority&appName=test")
+mongoose.connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to the DB");
   })

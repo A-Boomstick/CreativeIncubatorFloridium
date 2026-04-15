@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const app = express();
 
@@ -8,7 +10,7 @@ app.use(express.json());
 app.listen(3000, () => console.log("Listening on http://localhost:3000"));
 
 async function postExample(request, response) {
-    const data = await fetch("https://trefle.io/api/v1/plants?token=usr-polxuVTSQmE9cwoXrS0KcwyZaZ-_o27woxACGgIvZEI");
+    const data = await fetch(process.env.TREFLE_URL);
     const json = await data.json();
     console.log(json);
     response.send(json);
