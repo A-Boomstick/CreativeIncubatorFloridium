@@ -6,7 +6,7 @@ app.use(express.json());
 
 
 const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/floridium?retryWrites=true&w=majority")
   .then(() => {
     console.log("Connected to the DB");
   })
