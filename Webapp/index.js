@@ -1,10 +1,15 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const users = require("./model/users");
 
+const { envstuff } = process.env;
+
 const app = express();
+
+// Run it with the following command: node --env-file=.env .
 
 // MongoDB connection
 mongoose
