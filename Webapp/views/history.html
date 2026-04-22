@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floridium - About us</title>
+    <title>Plant history</title>
     <link rel="stylesheet" href="styles/plantsStyles.css">
-    <script src="main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="history.js" defer></script>
 </head>
 
 <body>
@@ -27,14 +28,23 @@
             <a href="AboutUs">
                 <button id="AboutUsBTN">About us</button>
             </a>
-            <a href="">
+            <a href="plantsOwned">
                 <button id="YourPlantsBTN">Your plants</button>
             </a>
         </section>
     </header>
-    <!-- make this have a gap instead of just margins/ padding! -->
-    <main id="plant-list">
-
+    <main>
+        <a href="plantsOwned">
+                <button id="YourPlantsBTN">
+                    <img src="Assets/back-arrow.png" alt="">
+                </button>
+            </a>
+        <h2>Sunlight</h2>
+        <canvas id="SunlightChart"></canvas>
+        <h2>Moisture</h2>
+        <canvas id="MoistureChart"></canvas>
+        <h2>Temperature</h2>
+        <canvas id="TemperatureChart"></canvas>
     </main>
 </body>
 

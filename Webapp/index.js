@@ -1,10 +1,15 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const users = require("./model/users");
 
+const { envstuff } = process.env;
+
 const app = express();
+
+// Run it with the following command: node --env-file=.env .
 
 // MongoDB connection
 mongoose
@@ -84,6 +89,65 @@ app.get("/homepage", (req, res) => {
   }
 
   res.sendFile(path.join(__dirname, "views", "homepage.html"));
+});
+
+app.get("/HomepageLink", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "homepage.html"));
+});
+
+app.get("/AboutUs", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
+});
+
+// creating a connection to the test user
+const testUser = mongoose.createConnection("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/userJeff?retryWrites=true&w=majority");
+
+// storing the plant data
+const plantData = new mongoose.Schema({
+    Sunlight: [Number],
+    Moisture: [Number],
+    Temprature: [Number],
+    DateStart: String 
+}, { 
+    collection: 'plantPotOne',
+    toJSON: { virtuals: true }, 
+    toObject: { virtuals: true }
+});
+
+const PlantModel = testUser.model('Plant', plantData);
+
+app.get("/plantsOwned", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "plantsOwned.html"));
+});
+
+app.get("/api/plants", async (req, res) => {
+    try {
+        const plants = await PlantModel.find({});
+        res.json(plants); 
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        res.status(500).json({ error: "Failed to fetch plants" });
+    }
+});
+
+// route to plant history
+app.get("/history", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "history.html"));
+});
+
+app.get("/api/plants/:id", async (req, res) => {
+  try {
+    const plant = await PlantModel.findById(req.params.id);
+
+    if (!plant) {
+      return res.status(404).json({ error: "Plant not found" });
+    }
+
+    res.json(plant);
+  } catch (err) {
+    console.error("Fetch plant error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // Optional homepage test route

@@ -48,9 +48,20 @@ h1 {
     box-shadow: 4px 4px 4px;
 }
 
-/* main {
-    margin-top: 100px; make this gap?
-} */
+main {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    margin: auto;
+    max-width: 1100px;
+    /* border-left: 0.5px solid black;
+    border-right: 0.5px solid black; */
+}
+
+main img {
+    width: 40px;
+    height: 40px;
+}
 
 .PlantContainer {
     display: grid;
@@ -80,6 +91,35 @@ h2 {
     font-size: 220%;
 }
 
+.PlantDetails h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.PlantTitle {
+    display: grid;
+    grid-template-columns: 8fr 1fr;
+}
+
+.PlantTitle img {    
+    width: 25px;
+    height: 25px;
+}
+
+.PlantTitle button {
+    width: 0px;
+    height: 0px;
+    padding: 0;
+    background-color: transparent;
+    border: 0px;
+    box-shadow: none;
+}
+
+.PlantTitle button:hover {
+    background-color: transparent;
+    box-shadow: none;
+}
+
 button {
     background-color: #d4edda;
     border: 1px solid black;
@@ -100,4 +140,15 @@ button:hover {
 button:active {
     transform: translateY(1px);
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.status-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.thumb-down {
+    transform: rotate(180deg) scaleX(-1);
 }
