@@ -25,7 +25,7 @@ const plantDataSchema = new mongoose.Schema({
 
 const data = mongoose.model("data", plantDataSchema);
 
-app.get('/', checkLoggedIn, (request, response)=>{
+app.get('/', (request, response)=>{
 
     response.sendFile(path.join(__dirname, '/', 'index.html'))
 })
