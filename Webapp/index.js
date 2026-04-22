@@ -91,6 +91,10 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
+app.get("/aboutus", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
+});
+
 // Start server
 app.listen(3000, () => {
   console.log("Listening on http://localhost:3000");
