@@ -16,6 +16,26 @@ async function postExample(request, response) {
     response.send(json);
 }
 
+async function searchExample(request, response) {
+    /*const data = await fetch("https://trefle.io/api/v1/plants/search", {
+        token: process.env.TREFLE_TOKEN,
+        body:
+    })
+    */
+
+    try {
+        const test = await fetch("https://trefle.io/api/v1/plants/search?q=" + request.body.name + "&token=" + process.env.TREFLE_TOKEN)
+        const data = await test.json()
+        console.log(data)
+        response.send(data);
+    }
+    catch (error) {
+        console.log("Error, ", error);
+    }
+}
+
+app.post("/search", searchExample);
+
 app.get("/example", postExample);
 
 app.use(express.static(path.join(__dirname, 'public')));
