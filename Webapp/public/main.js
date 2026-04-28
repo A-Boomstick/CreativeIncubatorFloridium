@@ -91,3 +91,30 @@ PlantList.addEventListener("click", (event) => {
         window.location.href = `/history?id=${PlantID}`;
     }
 })
+
+
+const addPotBTN = document.getElementById("addPotBTN");
+const potIDinput = document.getElementById("potIDinput");
+
+addPotBTN.addEventListener("click", async () => {
+    const potID = potIDinput.value.trim();
+
+    try {
+        const response = await fetch("/api/addPot", {
+            method: "POST",
+            headers: {
+                "content-Type": "application/json"
+            },
+            body: JSON.stringify({potID})
+        })
+
+        const data = await response.json();
+
+        potIDinput.value = "";
+
+        renderPlants();
+
+    } catch (err) {
+        console.error("Error adding pot to user:", err);
+    }
+})

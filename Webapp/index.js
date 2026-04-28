@@ -295,6 +295,29 @@ app.get("/api/plants/:id", async (req, res) => {
   }
 });
 
+app.post("/api/addPot", async (req, res) => {
+  try {
+    const currentUsername = req.session.username || TEMP_TEST_USER;
+    const { potID } = req.body;
+
+    const updatedDoc = await UserPotTable.findOneAndUpdate(
+      { user_id: currentUsername },
+      { $addToSet: { pot_ids: potID } },
+      { new: true, upsert: true }
+    ).lean();
+
+    res.json({
+      message: "Pot added successfully",
+      user: currentUsername,
+      pot_ids: updatedDoc.pot_ids,
+    });
+
+  } catch (err) {
+    console.error("failed to add pot:", err);
+    res.status(500).json({ error: "failed to add pot" })
+  }
+})
+
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");

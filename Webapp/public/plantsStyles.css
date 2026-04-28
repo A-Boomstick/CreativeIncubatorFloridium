@@ -48,6 +48,19 @@ h1 {
     box-shadow: 4px 4px 4px;
 }
 
+.AddPlantPot {
+    margin: 20px;
+}
+
+.AddPlantPot input {
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.AddPlantPot button {
+    padding: 8px 12px;
+}
+
 main {
     display: grid;
     grid-template-columns: 1fr;
