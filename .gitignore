@@ -137,3 +137,6 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+Webapp/env
+Webapp/package-lock.json
+Webapp/package-lock.json

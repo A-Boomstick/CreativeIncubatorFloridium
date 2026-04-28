@@ -1,21 +1,24 @@
-require('dotenv').config();
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const users = require("./model/users");
 
-const { envstuff } = process.env;
-
 const app = express();
 
-// Run it with the following command: node --env-file=.env .
+// change this manually when testing without a real login
+const TEMP_TEST_USER = "ted";
+
+// keep dotenv support from the other version
+const mongoUri =
+  process.env.MONGO_URI ||
+  "mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/floridium?retryWrites=true&w=majority&appName=floridium";
 
 // MongoDB connection
 mongoose
-  .connect(
-    "mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/floridium?retryWrites=true&w=majority&appName=floridium",
-  )
+  .connect(mongoUri)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("MongoDB connection error:", err));
 
@@ -32,7 +35,115 @@ app.use(
   }),
 );
 
+// --------------------
+// Schemas / Models
+// --------------------
+
+const userPotTableSchema = new mongoose.Schema(
+  {
+    user_id: String,
+    pot_ids: [String],
+  },
+  { collection: "user_pot_table" },
+);
+
+const dataSchema = new mongoose.Schema(
+  {
+    box_id: String,
+    moisture_reading: mongoose.Schema.Types.Mixed,
+    temprature_reading: mongoose.Schema.Types.Mixed,
+    sunlight_reading: mongoose.Schema.Types.Mixed,
+    reading_time: Date,
+  },
+  { collection: "datas" },
+);
+
+const UserPotTable =
+  mongoose.models.UserPotTable ||
+  mongoose.model("UserPotTable", userPotTableSchema);
+
+const PlantReading =
+  mongoose.models.PlantReading ||
+  mongoose.model("PlantReading", dataSchema);
+
+// --------------------
+// Helper functions
+// --------------------
+
+function groupPlantsFromReadings(readings) {
+  const groupedPlants = {};
+
+  readings.forEach((reading) => {
+    const boxId = reading.box_id;
+
+    if (!groupedPlants[boxId]) {
+      groupedPlants[boxId] = {
+        _id: boxId,
+        box_id: boxId,
+        Sunlight: [],
+        Moisture: [],
+        Temprature: [],
+        DateStart: reading.reading_time,
+      };
+    }
+
+    const moisture = Number(reading.moisture_reading);
+    const temp = Number(reading.temprature_reading);
+    const sunlight = Number(reading.sunlight_reading);
+
+    if (!Number.isNaN(moisture)) {
+      groupedPlants[boxId].Moisture.push(moisture);
+    }
+
+    if (!Number.isNaN(temp)) {
+      groupedPlants[boxId].Temprature.push(temp);
+    }
+
+    if (!Number.isNaN(sunlight)) {
+      groupedPlants[boxId].Sunlight.push(sunlight);
+    }
+  });
+
+  return Object.values(groupedPlants);
+}
+
+function buildSinglePlantFromReadings(readings, boxId) {
+  if (!readings.length) return null;
+
+  const plant = {
+    _id: boxId,
+    box_id: boxId,
+    Sunlight: [],
+    Moisture: [],
+    Temprature: [],
+    DateStart: readings[0].reading_time,
+  };
+
+  readings.forEach((reading) => {
+    const moisture = Number(reading.moisture_reading);
+    const temp = Number(reading.temprature_reading);
+    const sunlight = Number(reading.sunlight_reading);
+
+    if (!Number.isNaN(moisture)) {
+      plant.Moisture.push(moisture);
+    }
+
+    if (!Number.isNaN(temp)) {
+      plant.Temprature.push(temp);
+    }
+
+    if (!Number.isNaN(sunlight)) {
+      plant.Sunlight.push(sunlight);
+    }
+  });
+
+  return plant;
+}
+
+// --------------------
 // Routes
+// --------------------
+
 app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "register.html"));
 });
@@ -99,35 +210,49 @@ app.get("/AboutUs", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
 });
 
-// creating a connection to the test user
-const testUser = mongoose.createConnection("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/userJeff?retryWrites=true&w=majority");
-
-// storing the plant data
-const plantData = new mongoose.Schema({
-    Sunlight: [Number],
-    Moisture: [Number],
-    Temprature: [Number],
-    DateStart: String 
-}, { 
-    collection: 'plantPotOne',
-    toJSON: { virtuals: true }, 
-    toObject: { virtuals: true }
+// kept because the other code had lowercase /aboutus too
+app.get("/aboutus", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
 });
 
-const PlantModel = testUser.model('Plant', plantData);
-
 app.get("/plantsOwned", (req, res) => {
+  // preserve real login if it exists, otherwise use your temporary test user
+  if (!req.session.username) {
+    req.session.username = TEMP_TEST_USER;
+  }
+
   res.sendFile(path.join(__dirname, "views", "plantsOwned.html"));
 });
 
 app.get("/api/plants", async (req, res) => {
-    try {
-        const plants = await PlantModel.find({});
-        res.json(plants); 
-    } catch (err) {
-        console.error("Fetch Error:", err);
-        res.status(500).json({ error: "Failed to fetch plants" });
+  try {
+    const currentUsername = req.session.username || TEMP_TEST_USER;
+
+    if (!currentUsername) {
+      return res.status(401).json({ error: "No user selected" });
     }
+
+    const userPotDoc = await UserPotTable.findOne({
+      user_id: currentUsername,
+    }).lean();
+
+    if (!userPotDoc || !userPotDoc.pot_ids || userPotDoc.pot_ids.length === 0) {
+      return res.json([]);
+    }
+
+    const readings = await PlantReading.find({
+      box_id: { $in: userPotDoc.pot_ids },
+    })
+      .sort({ box_id: 1, reading_time: 1 })
+      .lean();
+
+    const plants = groupPlantsFromReadings(readings);
+
+    res.json(plants);
+  } catch (err) {
+    console.error("Fetch plants error:", err);
+    res.status(500).json({ error: "Failed to fetch plants" });
+  }
 });
 
 // route to plant history
@@ -137,7 +262,27 @@ app.get("/history", (req, res) => {
 
 app.get("/api/plants/:id", async (req, res) => {
   try {
-    const plant = await PlantModel.findById(req.params.id);
+    const currentUsername = req.session.username || TEMP_TEST_USER;
+
+    if (!currentUsername) {
+      return res.status(401).json({ error: "No user selected" });
+    }
+
+    const userPotDoc = await UserPotTable.findOne({
+      user_id: currentUsername,
+    }).lean();
+
+    if (!userPotDoc || !userPotDoc.pot_ids.includes(req.params.id)) {
+      return res.status(403).json({ error: "Plant not owned by this user" });
+    }
+
+    const readings = await PlantReading.find({
+      box_id: req.params.id,
+    })
+      .sort({ reading_time: 1 })
+      .lean();
+
+    const plant = buildSinglePlantFromReadings(readings, req.params.id);
 
     if (!plant) {
       return res.status(404).json({ error: "Plant not found" });
@@ -153,10 +298,6 @@ app.get("/api/plants/:id", async (req, res) => {
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");
-});
-
-app.get("/aboutus", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
 });
 
 // Start server
