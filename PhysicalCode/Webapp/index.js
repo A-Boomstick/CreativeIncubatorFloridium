@@ -66,6 +66,18 @@ const PlantReading =
   mongoose.models.PlantReading ||
   mongoose.model("PlantReading", dataSchema);
 
+
+const plantDataSchema = new mongoose.Schema({
+  box_id: String,
+  soil_moisture: Number,
+  temperature: Number,
+  sunlight: Number,
+  humidity: Number,
+  reading_time: { type: Date, default: Date.now }
+});
+
+const data = mongoose.model("data", plantDataSchema);
+
 // --------------------
 // Helper functions
 // --------------------
@@ -321,6 +333,31 @@ app.post("/api/addPot", async (req, res) => {
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");
+});
+
+
+app.post("/data", async (req, res) => {
+  
+  try{
+    console.log(req.body);
+    const newData = new data({
+      box_id: req.body.box_id,
+      soil_moisture: req.body.soil_moisture,
+      temperature: req.body.temperature,
+      humidity: req.body.humidity,
+      sunlight: req.body.sunlight
+    });
+
+    await newData.save();
+    console.log("saved: ", req.body);
+    
+    res.send("Saved To DB");
+
+  }
+  catch (err){
+    console.error(err);
+    res.status(500).send("Error saving data");
+  }
 });
 
 // Start server
