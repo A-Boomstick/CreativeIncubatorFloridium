@@ -50,8 +50,8 @@ const userPotTableSchema = new mongoose.Schema(
 const dataSchema = new mongoose.Schema(
   {
     box_id: String,
-    moisture_reading: mongoose.Schema.Types.Mixed,
-    temprature_reading: mongoose.Schema.Types.Mixed,
+    soil_moisture: mongoose.Schema.Types.Mixed,
+    temprature: mongoose.Schema.Types.Mixed,
     sunlight_reading: mongoose.Schema.Types.Mixed,
     reading_time: Date,
   },
@@ -99,8 +99,8 @@ function groupPlantsFromReadings(readings) {
       };
     }
 
-    const moisture = Number(reading.moisture_reading);
-    const temp = Number(reading.temprature_reading);
+    const moisture = Number(reading.soil_moisture);
+    const temp = Number(reading.temprature);
     const sunlight = Number(reading.sunlight_reading);
 
     if (!Number.isNaN(moisture)) {
@@ -132,8 +132,8 @@ function buildSinglePlantFromReadings(readings, boxId) {
   };
 
   readings.forEach((reading) => {
-    const moisture = Number(reading.moisture_reading);
-    const temp = Number(reading.temprature_reading);
+    const moisture = Number(reading.soil_moisture);
+    const temp = Number(reading.temprature);
     const sunlight = Number(reading.sunlight_reading);
 
     if (!Number.isNaN(moisture)) {

@@ -120,6 +120,8 @@ void postRequest() {
     //Read data
     Serial.println("going to start reading data: ");
 
+    int sunReading = 50;
+    
     // Read the analog value from the soil sensor
     int soilReading = analogRead(33);
     Serial.print("soil : ");
@@ -148,6 +150,7 @@ void postRequest() {
     json += "\"box_id\":\"Floridium01\",";
     json += "\"soil_moisture\":" + String(soilReading) + ",";
     json += "\"temperature\":" + String(tempReading) + ",";
+    json += "\"sunlight_reading\":" + String(sunReading) + ",";
     json += "\"humidity\":" + String(humidityReading);
     json += "}";
 
