@@ -3,6 +3,8 @@
 #include <HTTPClient.h>
 #include <Preferences.h>
 #include <DNSServer.h>
+#include "Adafruit_SHT4x.h"
+// #include <ArduinoJson.h>
 
 // web server on port 80
 WebServer server(80);
@@ -16,10 +18,16 @@ Preferences prefrences;
 
 TaskHandle_t POSTTask;
 
+Adafruit_SHT4x sht4 = Adafruit_SHT4x();
 
 String ssid;
 String password;
 bool shouldRestart = false;
+
+float tempReading;
+float humidityReading;
+
+
 
 static const String htmlPage = R"===(
 <!DOCTYPE html>
@@ -86,7 +94,6 @@ void handleNotFound() {
   server.send(302, "text/plain", "redirect tp captive portal");
 }
 
-
 void APMode() {
 
   //starts wifi with
@@ -107,34 +114,58 @@ void APMode() {
   // Serial.print(WiFi.softAPIP());
 }
 
+
 void postRequest() {
   if (WiFi.status() == WL_CONNECTED) {
+    //Read data
+    Serial.println("going to start reading data: ");
+
+    // Read the analog value from the soil sensor
+    int soilReading = analogRead(33);
+    Serial.print("soil : ");
+    Serial.println(soilReading);
+
+    delay(150);
+
+    sensors_event_t humidity, temp;
+    sht4.getEvent(&humidity, &temp);
+    Serial.print("temp : ");
+    Serial.println(temp.temperature);
+    Serial.print("humid : ");
+    Serial.println(humidity.relative_humidity);
+
+    tempReading = temp.temperature;
+    humidityReading = humidity.relative_humidity;
+
+
     HTTPClient http;
     http.begin("https://creativeincubatorfloridium.onrender.com/data");
     http.addHeader("Content-Type", "application/json");
 
-    String json = R"({
-      "box_id": "Floridium01",
-      "Soil Moisture": "data",
-      "Temprature": "data",
-      "Humidity": "data",
-      "Sunlight": "data"
-    })";
+
+
+    String json = "{";
+    json += "\"box_id\":\"Floridium01\",";
+    json += "\"soil_moisture\":" + String(soilReading) + ",";
+    json += "\"temperature\":" + String(tempReading) + ",";
+    json += "\"humidity\":" + String(humidityReading);
+    json += "}";
+
+    Serial.println(json);
 
     int httpResponseCode = http.POST(json);
 
-    
+
     Serial.print("Response: ");
     Serial.println(httpResponseCode);
 
-    if (httpResponseCode == -11){
+    if (httpResponseCode == -11) {
       delay(5000);
       httpResponseCode = http.POST(json);
     }
 
     http.end();
-  } 
-  else {
+  } else {
     Serial.print("Couldn't connect to the network!");
   }
 }
@@ -142,6 +173,16 @@ void postRequest() {
 
 void POSTTaskcode(void* parameter) {
   for (;;) {  //infinite loop
+    //attempt to conenct to wifi
+    // WiFi.begin(ssid, password);
+
+    // int attempts = 0;
+    // while (WiFi.status() != WL_CONNECTED && attempts < 20) {
+    //   delay(500);
+    //   Serial.print(".");
+    //   attempts++;
+    // }
+
     if (WiFi.status() == WL_CONNECTED) {
       postRequest();
 
@@ -149,8 +190,11 @@ void POSTTaskcode(void* parameter) {
       Serial.print("Can't connect to the network! POST request not sent");
     }
 
-    //delay for an hour
-    vTaskDelay(3600000 / portTICK_PERIOD_MS);
+    // //delay for an hour
+    // vTaskDelay(3600000 / portTICK_PERIOD_MS);
+
+    //delay for short time
+    vTaskDelay(14000 / portTICK_PERIOD_MS);
   }
 }
 
@@ -158,8 +202,8 @@ void POSTTaskcode(void* parameter) {
 void setup() {
   Serial.begin(115200);
 
-  prefrences.begin("wifi", false);
-  prefrences.end();
+  // prefrences.begin("wifi", false);
+  // prefrences.end();
 
   //load / set up prefrences = uses "" ONLY if empty already
   prefrences.begin("wifi", true);
@@ -177,6 +221,7 @@ void setup() {
     return;
   }
 
+  sht4.begin();
   WiFi.begin(ssid, password);
 
   int attempts = 0;
@@ -187,17 +232,24 @@ void setup() {
   }
 
   if (WiFi.status() == WL_CONNECTED) {
+
+
     Serial.print("Connected to network!");
 
-      //create a task to run on core 0 - this keeps the post requests running seperate from the wifi setup. 
-      xTaskCreatePinnedToCore(
-        POSTTaskcode,
-        "POSTTask",
-        10000,
-        NULL,
-        1,
-        NULL,
-        0);
+    //setup sensors
+    sht4.setPrecision(SHT4X_HIGH_PRECISION);
+    sht4.setHeater(SHT4X_LOW_HEATER_100MS);
+
+
+    //create a task to run on core 0 - this keeps the post requests running seperate from the wifi setup.
+    xTaskCreatePinnedToCore(
+      POSTTaskcode,
+      "POSTTask",
+      25000,
+      NULL,
+      1,
+      NULL,
+      1);
 
 
   } else {

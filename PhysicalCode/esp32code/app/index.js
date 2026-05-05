@@ -17,9 +17,10 @@ mongoose.connect("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkj
 
 const plantDataSchema = new mongoose.Schema({
   box_id: String,
-  moisture_reading: String,
-  temprature_reading: String,
-  sunlight_reading: String,
+  moisture_reading: Number,
+  temprature_reading: Number,
+  sunlight_reading: Number,
+  humidity: Number,
   reading_time: { type: Date, default: Date.now }
 })
 
@@ -37,12 +38,14 @@ app.post("/data", async (req, res) => {
     console.log(req.body);
     const newData = new data({
       box_id: req.body.box_id,
-      moisture_reading: req.body["Soil Moisture"],
-      temprature_reading: req.body.Temprature,
-      sunlight_reading: req.body.Sunlight
+      soil_moisture: req.body.soil_moisture,
+      temperature: req.body.temperature,
+      humidity: req.body.humidity,
+      sunlight_reading: req.body.sunlight
     });
 
     await newData.save();
+    console.log("saved: ", req.body);
     
     res.send("Saved To DB");
 
