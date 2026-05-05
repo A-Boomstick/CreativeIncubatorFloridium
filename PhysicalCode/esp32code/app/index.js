@@ -15,6 +15,7 @@ mongoose.connect("mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkj
     process.exit();
   })
 
+  
 const plantDataSchema = new mongoose.Schema({
   box_id: String,
   soil_moisture: Number,
