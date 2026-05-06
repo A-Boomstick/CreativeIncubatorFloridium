@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="store.css">
+</head>
+
+<body>
+    <header>
+        <h1>FLORIDIUM - STORE</h1>
+        <div class="navigation-bar">
+            <nav class="nav-links">
+                <a href="homepage" class="nav-item">Home</a>
+                <a href="aboutus" class="nav-item">About Us</a>
+                <a href="store" class="nav-item">Store</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="product-container">
+            <div class="product-image">
+                <img src="Assets/plantpot1.png" alt="Smart Plant Pot">
+            </div>
+            <div class="product-info">
+                <h2>Floridium Smart Plant Pot</h2>
+                <p class="price">£49.99</p>
+
+                <p class="description">
+                    A smart, sustainable plant pot designed to help your plant live longer. Track water levels,
+                    temprature, and plant conditions in real time, all connected to your personal dashboard
+                </p>
+
+                <ul class="features-list">
+                    <li>Tracks water levels</li>
+                    <li>Monitors temprature</li>
+                    <li>Website data tracking</li>
+                    <li>Sustainable design</li>
+                </ul>
+
+                <button class="add-button" onclick="addToCart()">Add to Basket</button>
+
+                <p id="cart-message"></p>
+            </div>
+        </section>
+    </main>
+    <script>
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const product = {
+                name: "Floridium Smart Plant Pot",
+                price: 49.99
+            };
+
+            cart.push(product);
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            document.getElementById("cart-message").innerText = "Product has been added to your basket";
+        }
+    </script>
+</body>
+
+</html>

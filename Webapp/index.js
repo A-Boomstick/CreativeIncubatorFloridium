@@ -1,5 +1,12 @@
 require("dotenv").config();
+<<<<<<< Updated upstream
 
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7cd26589d54a84681e53b152d6b70d54d75e6d3e
+>>>>>>> Stashed changes
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -210,11 +217,42 @@ app.get("/AboutUs", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
 });
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+// creating a connection to the test user
+const testUser = mongoose.createConnection(
+  "mongodb+srv://kiran1104_db_user:VsxQ2SCnphgCEGVY@floridium.vkjfn7c.mongodb.net/userJeff?retryWrites=true&w=majority",
+);
+
+// storing the plant data
+const plantData = new mongoose.Schema(
+  {
+    Sunlight: [Number],
+    Moisture: [Number],
+    Temprature: [Number],
+    DateStart: String,
+  },
+  {
+    collection: "plantPotOne",
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
+
+const PlantModel = testUser.model("Plant", plantData);
+
+=======
+>>>>>>> Stashed changes
 // kept because the other code had lowercase /aboutus too
 app.get("/aboutus", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
 });
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> 7cd26589d54a84681e53b152d6b70d54d75e6d3e
+>>>>>>> Stashed changes
 app.get("/plantsOwned", (req, res) => {
   // preserve real login if it exists, otherwise use your temporary test user
   if (!req.session.username) {
@@ -226,6 +264,15 @@ app.get("/plantsOwned", (req, res) => {
 
 app.get("/api/plants", async (req, res) => {
   try {
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    const plants = await PlantModel.find({});
+    res.json(plants);
+  } catch (err) {
+    console.error("Fetch Error:", err);
+=======
+>>>>>>> Stashed changes
     const currentUsername = req.session.username || TEMP_TEST_USER;
 
     if (!currentUsername) {
@@ -251,6 +298,10 @@ app.get("/api/plants", async (req, res) => {
     res.json(plants);
   } catch (err) {
     console.error("Fetch plants error:", err);
+<<<<<<< Updated upstream
+=======
+>>>>>>> 7cd26589d54a84681e53b152d6b70d54d75e6d3e
+>>>>>>> Stashed changes
     res.status(500).json({ error: "Failed to fetch plants" });
   }
 });
@@ -323,6 +374,20 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+app.get("/aboutus", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
+});
+
+app.get("/store", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "store.html"));
+});
+
+=======
+>>>>>>> 7cd26589d54a84681e53b152d6b70d54d75e6d3e
+>>>>>>> Stashed changes
 // Start server
 app.listen(3000, () => {
   console.log("Listening on http://localhost:3000");
