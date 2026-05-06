@@ -152,6 +152,18 @@ function buildSinglePlantFromReadings(readings, boxId) {
   return plant;
 }
 
+function checkWithinBounds(value, upper, lower){
+  let upperCheck = upper - value;
+  let lowerCheck = value - lower;
+  if (upperCheck < 0){
+    return (1)
+  } else if (lowerCheck < 0) {
+    return (-1)
+  } else {
+    return (0)
+  }
+}
+
 // --------------------
 // Routes
 // --------------------
@@ -348,10 +360,22 @@ app.post("/data", async (req, res) => {
       sunlight: req.body.sunlight
     });
 
+    // Will eventually make a JSON with the data, time constraints
+    const upperIdealTemp = 24;
+    const lowerIdealTemp = 16;
+    const upperIdealMoisture = 70;
+    const lowerIdealMoisture = 45;
+    const upperIdealLight = 60;
+    const lowerIdealLight = 50;
+
+    let tempCheck = checkWithinBounds(newData.temperature, upperIdealTemp, lowerIdealTemp);
+    let moistureCheck = checkWithinBounds(newData.soil_moisture, upperIdealMoisture, lowerIdealMoisture);
+    let lightCheck = checkWithinBounds(newData.sunlight, upperIdealLight, lowerIdealLight);
+
     await newData.save();
     console.log("saved: ", req.body);
     
-    res.send("Saved To DB");
+    res.send("Saved To DB", tempCheck, moistureCheck, lightCheck);
 
   }
   catch (err){

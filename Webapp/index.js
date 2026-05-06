@@ -26,12 +26,20 @@ async function searchExample(request, response) {
     try {
         const test = await fetch("https://trefle.io/api/v1/plants/search?q=" + request.body.name + "&token=" + process.env.TREFLE_TOKEN)
         const data = await test.json()
-        console.log(data)
-        response.send(data);
+        //console.log(data)
+        console.log(data.data[0].slug)
+        //response.send(data);
+        console.log("Second request below")
+        const test2 = await fetch("https://trefle.io/api/v1/plants/" + data.data[0].slug + "?token=" + process.env.TREFLE_TOKEN)
+        const data2 = await test2.json()
+        console.log(data2.data.main_species.growth)
+        response.send(data2);
     }
     catch (error) {
         console.log("Error, ", error);
     }
+
+    
 }
 
 app.post("/search", searchExample);
