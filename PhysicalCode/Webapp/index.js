@@ -249,7 +249,11 @@ app.get("/plantsOwned", (req, res) => {
 });
 
 app.get("/api/plants", async (req, res) => {
-  try {
+    try {
+    if (!req.session.username) {
+      req.session.username = TEMP_TEST_USER;
+    }
+
     const currentUsername = req.session.username || TEMP_TEST_USER;
 
     if (!currentUsername) {
