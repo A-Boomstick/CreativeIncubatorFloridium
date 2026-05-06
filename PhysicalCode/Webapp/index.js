@@ -229,13 +229,13 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// app.get("/homepage", (req, res) => {
-//   if (!req.session.userId) {
-//     return res.redirect("/login");
-//   }
+app.get("/homepage", (req, res) => {
+  // if (!req.session.userId) {
+  //   return res.redirect("/login");
+  // }
 
-//   res.sendFile(path.join(__dirname, "views", "homepage.html"));
-// });
+  res.sendFile(path.join(__dirname, "views", "homepage.html"));
+});
 
 app.get("/HomepageLink", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "homepage.html"));
