@@ -64,9 +64,7 @@ const UserPotTable =
   mongoose.model("UserPotTable", userPotTableSchema);
 
 const PlantReading =
-  mongoose.models.PlantReading ||
-  mongoose.model("PlantReading", dataSchema);
-
+  mongoose.models.PlantReading || mongoose.model("PlantReading", dataSchema);
 
 const plantDataSchema = new mongoose.Schema({
   box_id: String,
@@ -74,7 +72,7 @@ const plantDataSchema = new mongoose.Schema({
   temperature: Number,
   sunlight_reading: Number,
   humidity: Number,
-  reading_time: { type: Date, default: Date.now }
+  reading_time: { type: Date, default: Date.now },
 });
 
 const data = mongoose.model("data", plantDataSchema);
@@ -119,7 +117,7 @@ function groupPlantsFromReadings(readings) {
     }
 
     if (!Number.isNaN(humidity)) {
-      groupedPlants[boxId].Humidity.push(humidity)
+      groupedPlants[boxId].Humidity.push(humidity);
     }
   });
 
@@ -165,15 +163,15 @@ function buildSinglePlantFromReadings(readings, boxId) {
   return plant;
 }
 
-function checkWithinBounds(value, upper, lower){
+function checkWithinBounds(value, upper, lower) {
   let upperCheck = upper - value;
   let lowerCheck = value - lower;
-  if (upperCheck < 0){
-    return (1)
+  if (upperCheck < 0) {
+    return 1;
   } else if (lowerCheck < 0) {
-    return (-1)
+    return -1;
   } else {
-    return (0)
+    return 0;
   }
 }
 
@@ -243,6 +241,10 @@ app.get("/HomepageLink", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
 
+app.get("/storepage", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "storepage.html"));
+});
+
 app.get("/AboutUs", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "AboutUs.html"));
 });
@@ -262,7 +264,7 @@ app.get("/plantsOwned", (req, res) => {
 });
 
 app.get("/api/plants", async (req, res) => {
-    try {
+  try {
     if (!req.session.username) {
       req.session.username = TEMP_TEST_USER;
     }
@@ -344,7 +346,7 @@ app.post("/api/addPot", async (req, res) => {
     const updatedDoc = await UserPotTable.findOneAndUpdate(
       { user_id: currentUsername },
       { $addToSet: { pot_ids: potID } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     ).lean();
 
     res.json({
@@ -352,29 +354,26 @@ app.post("/api/addPot", async (req, res) => {
       user: currentUsername,
       pot_ids: updatedDoc.pot_ids,
     });
-
   } catch (err) {
     console.error("failed to add pot:", err);
-    res.status(500).json({ error: "failed to add pot" })
+    res.status(500).json({ error: "failed to add pot" });
   }
-})
+});
 
 // Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-
 app.post("/data", async (req, res) => {
-  
-  try{
+  try {
     console.log(req.body);
     const newData = new data({
       box_id: req.body.box_id,
       soil_moisture: req.body.soil_moisture,
       temperature: req.body.temperature,
       humidity: req.body.humidity,
-      sunlight: req.body.sunlight
+      sunlight: req.body.sunlight,
     });
 
     // Will eventually make a JSON with the data, time constraints
@@ -387,18 +386,32 @@ app.post("/data", async (req, res) => {
     const upperIdealHum = 70;
     const lowerIdealHum = 40;
 
-    let tempCheck = checkWithinBounds(newData.temperature, upperIdealTemp, lowerIdealTemp);
-    let moistureCheck = checkWithinBounds(newData.soil_moisture, upperIdealMoisture, lowerIdealMoisture);
-    let lightCheck = checkWithinBounds(newData.sunlight, upperIdealLight, lowerIdealLight);
-    let humidityCheck = checkWithinBounds(newData.humidity, upperIdealHum, lowerIdealLight);
+    let tempCheck = checkWithinBounds(
+      newData.temperature,
+      upperIdealTemp,
+      lowerIdealTemp,
+    );
+    let moistureCheck = checkWithinBounds(
+      newData.soil_moisture,
+      upperIdealMoisture,
+      lowerIdealMoisture,
+    );
+    let lightCheck = checkWithinBounds(
+      newData.sunlight,
+      upperIdealLight,
+      lowerIdealLight,
+    );
+    let humidityCheck = checkWithinBounds(
+      newData.humidity,
+      upperIdealHum,
+      lowerIdealLight,
+    );
 
     await newData.save();
     console.log("saved: ", req.body);
-    
-    res.send("Saved To DB", tempCheck, moistureCheck, lightCheck);
 
-  }
-  catch (err){
+    res.send("Saved To DB", tempCheck, moistureCheck, lightCheck);
+  } catch (err) {
     console.error(err);
     res.status(500).send("Error saving data");
   }
