@@ -53,6 +53,7 @@ const dataSchema = new mongoose.Schema(
     soil_moisture: mongoose.Schema.Types.Mixed,
     temperature: mongoose.Schema.Types.Mixed,
     sunlight_reading: mongoose.Schema.Types.Mixed,
+    humidity: mongoose.Schema.Types.Mixed,
     reading_time: Date,
   },
   { collection: "datas" },
@@ -95,6 +96,7 @@ function groupPlantsFromReadings(readings) {
         Sunlight: [],
         Moisture: [],
         Temprature: [],
+        Humidity: [],
         DateStart: reading.reading_time,
       };
     }
@@ -102,6 +104,7 @@ function groupPlantsFromReadings(readings) {
     const moisture = Number(reading.soil_moisture);
     const temp = Number(reading.temperature);
     const sunlight = Number(reading.sunlight_reading);
+    const humidity = Number(reading.humidity);
 
     if (!Number.isNaN(moisture)) {
       groupedPlants[boxId].Moisture.push(moisture);
@@ -113,6 +116,10 @@ function groupPlantsFromReadings(readings) {
 
     if (!Number.isNaN(sunlight)) {
       groupedPlants[boxId].Sunlight.push(sunlight);
+    }
+
+    if (!Number.isNaN(humidity)) {
+      groupedPlants[boxId].Humidity.push(humidity)
     }
   });
 
@@ -128,6 +135,7 @@ function buildSinglePlantFromReadings(readings, boxId) {
     Sunlight: [],
     Moisture: [],
     Temprature: [],
+    Humidity: [],
     DateStart: readings[0].reading_time,
   };
 
@@ -135,6 +143,7 @@ function buildSinglePlantFromReadings(readings, boxId) {
     const moisture = Number(reading.soil_moisture);
     const temp = Number(reading.temperature);
     const sunlight = Number(reading.sunlight_reading);
+    const humidity = Number(reading.humidity);
 
     if (!Number.isNaN(moisture)) {
       plant.Moisture.push(moisture);
@@ -146,6 +155,10 @@ function buildSinglePlantFromReadings(readings, boxId) {
 
     if (!Number.isNaN(sunlight)) {
       plant.Sunlight.push(sunlight);
+    }
+
+    if (!Number.isNaN(humidity)) {
+      plant.Humidity.push(humidity);
     }
   });
 
@@ -371,10 +384,13 @@ app.post("/data", async (req, res) => {
     const lowerIdealMoisture = 45;
     const upperIdealLight = 60;
     const lowerIdealLight = 50;
+    const upperIdealHum = 70;
+    const lowerIdealHum = 40;
 
     let tempCheck = checkWithinBounds(newData.temperature, upperIdealTemp, lowerIdealTemp);
     let moistureCheck = checkWithinBounds(newData.soil_moisture, upperIdealMoisture, lowerIdealMoisture);
     let lightCheck = checkWithinBounds(newData.sunlight, upperIdealLight, lowerIdealLight);
+    let humidityCheck = checkWithinBounds(newData.humidity, upperIdealHum, lowerIdealLight);
 
     await newData.save();
     console.log("saved: ", req.body);

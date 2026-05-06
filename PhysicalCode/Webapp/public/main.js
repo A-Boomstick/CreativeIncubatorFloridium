@@ -5,6 +5,8 @@ const idealTemperatureUpper = 24;
 const idealTemperatureLower = 15
 const idealSunlightUpper = 60;
 const idealSunlightLower = 50;
+const upperIdealHum = 70;
+const lowerIdealHum = 40;
 
 const inRange = (value, lower, upper) => value >= lower && value <= upper;
 
@@ -31,10 +33,12 @@ const renderPlants = async () => {
             const latestMoisture = plant.Moisture[plant.Moisture.length - 1]; // only got the latest for now, could get the average of the last few asw
             const latestSun = plant.Sunlight[plant.Sunlight.length - 1];
             const latestTemp = plant.Temprature[plant.Temprature.length - 1];
+            const latestHum = plant.Humidity[plant.Humidity.length - 1];
 
             const moistureStatus = getStatusIcon(latestMoisture, idealMoistureLower, idealMoistureUpper);
             const sunlightStatus = getStatusIcon(latestSun, idealSunlightLower, idealSunlightUpper);
             const tempStatus = getStatusIcon(latestTemp, idealTemperatureLower, idealTemperatureUpper);
+            const humStatus = getStatusIcon(latestHum, lowerIdealHum, upperIdealHum);
 
             output += `
                 <section class="PlantContainer">
@@ -62,6 +66,11 @@ const renderPlants = async () => {
                         <p>
                             <strong>Temperature:</strong> ${latestTemp}°C
                             <img src="${tempStatus.src}" alt="${tempStatus.alt}" class="status-icon ${tempStatus.className}">
+                        </p>
+
+                        <p>
+                            <strong>Humidity:</strong> ${latestHum}%
+                            <img src="${humStatus.src}" alt="${humStatus.alt}" class="status-icon ${humStatus.className}"?
                         </p>
 
                         <p><strong>Started:</strong> ${plant.DateStart}</p>
@@ -105,7 +114,7 @@ addPotBTN.addEventListener("click", async () => {
             headers: {
                 "content-Type": "application/json"
             },
-            body: JSON.stringify({potID})
+            body: JSON.stringify({ potID })
         })
 
         const data = await response.json();
