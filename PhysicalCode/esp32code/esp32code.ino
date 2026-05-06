@@ -207,7 +207,7 @@ void setup() {
   Serial.begin(115200);
 
   prefrences.begin("wifi", false);
-  // prefrences.clear();
+  //prefrences.clear();
   prefrences.end();
 
   //load / set up prefrences = uses "" ONLY if empty already
