@@ -124,7 +124,7 @@ void postRequest() {
     
     // Read the analog value from the soil sensor
     int soilReading = analogRead(33);
-    soilReading = soilReading / 10
+    soilReading = soilReading / 10;
     Serial.print("soil : ");
     Serial.println(soilReading);
 
@@ -206,8 +206,8 @@ void POSTTaskcode(void* parameter) {
 void setup() {
   Serial.begin(115200);
 
-  // prefrences.begin("wifi", false);
-  // prefrences.end();
+  prefrences.begin("wifi", false);
+  prefrences.end();
 
   //load / set up prefrences = uses "" ONLY if empty already
   prefrences.begin("wifi", true);
