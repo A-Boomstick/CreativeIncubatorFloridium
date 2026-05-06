@@ -71,7 +71,7 @@ const plantDataSchema = new mongoose.Schema({
   box_id: String,
   soil_moisture: Number,
   temperature: Number,
-  sunlight: Number,
+  sunlight_reading: Number,
   humidity: Number,
   reading_time: { type: Date, default: Date.now }
 });
