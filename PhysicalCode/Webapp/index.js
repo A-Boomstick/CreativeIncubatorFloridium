@@ -360,7 +360,7 @@ app.post("/api/addPot", async (req, res) => {
   }
 });
 
-// Optional homepage test route
+// //Optional homepage test route
 app.get("/", (req, res) => {
   res.send("Server is running");
 });

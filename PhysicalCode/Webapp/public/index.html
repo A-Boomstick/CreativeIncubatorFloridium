@@ -4,32 +4,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="/Assets/favicon.ico">
-    <title>Floridium</title>
+    <title>Floridium Loading</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: black;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+
+        body.fade-out {
+            opacity: 0;
+        }
+
+        .loader {
+            font-size: 48px;
+            font-weight: 600;
+            display: inline-block;
+            letter-spacing: 2px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: lightgreen;
+            animation: spotlight 2s linear infinite alternate;
+        }
+
+        @keyframes spotlight {
+
+            0%,
+            20% {
+                opacity: 1;
+                letter-spacing: 2px;
+            }
+
+            80%,
+            100% {
+                opacity: 0;
+                letter-spacing: 32px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header>
-        <h1>FLORIDIUM</h1>
-    </header>
-    <main>
-        <h2>Welcome to FLORIDIUM</h2>
-        <div id="button-container">
-            <a href="login">
-                <button>Login</button>
-            </a>
-            <a href="register">
-                <button>Register</button>
-            </a>
-            <a href="plantsOwned">
-                <button>Plants page {test}</button>
-            </a>
-        </div>
-    </main>
-    <footer>
 
-    </footer>
+    <span class="loader">FLORIDIUM</span>
+
+    <script>
+
+        setTimeout(() => {
+            document.body.classList.add("fade-out");
+
+
+            setTimeout(() => {
+                window.location.href = "/homepage";
+            }, 2000);
+
+        }, 5000);
+    </script>
+
 </body>
 
 </html>
