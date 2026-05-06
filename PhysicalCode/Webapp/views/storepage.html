@@ -40,4 +40,27 @@
                     <li>Sustainable design</li>
                 </ul>
 
-                <button class="add-button" onc
+                <button class="add-button" onclick="addToCart()">Add to Basket</button>
+
+                <p id="cart-message"></p>
+            </div>
+        </section>
+    </main>
+    <script>
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const product = {
+                name: "Floridium Smart Plant Pot",
+                price: 49.99
+            };
+
+            cart.push(product);
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            document.getElementById("cart-message").innerText = "Product has been added to your basket";
+        }
+    </script>
+</body>
+
+</html>
