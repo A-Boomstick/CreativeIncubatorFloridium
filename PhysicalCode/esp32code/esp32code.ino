@@ -207,6 +207,7 @@ void setup() {
   Serial.begin(115200);
 
   prefrences.begin("wifi", false);
+  // prefrences.clear();
   prefrences.end();
 
   //load / set up prefrences = uses "" ONLY if empty already
@@ -221,6 +222,7 @@ void setup() {
   // if ran for the first time
   if (ssid == "") {
     Serial.println("empty ssid");
+    Serial.println("Please go ahead and connect to FloridiumSetup");
     APMode();
     return;
   }
