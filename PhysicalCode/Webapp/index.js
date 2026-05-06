@@ -52,7 +52,7 @@ const dataSchema = new mongoose.Schema(
     box_id: String,
     soil_moisture: mongoose.Schema.Types.Mixed,
     temperature: mongoose.Schema.Types.Mixed,
-    sunlight_reading: mongoose.Schema.Types.Mixed,
+    sunlight: mongoose.Schema.Types.Mixed,
     reading_time: Date,
   },
   { collection: "datas" },
@@ -361,7 +361,7 @@ app.post("/data", async (req, res) => {
       soil_moisture: req.body.soil_moisture,
       temperature: req.body.temperature,
       humidity: req.body.humidity,
-      sunlight_reading: req.body.sunlight
+      sunlight: req.body.sunlight
     });
 
     // Will eventually make a JSON with the data, time constraints
