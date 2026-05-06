@@ -11,6 +11,14 @@ body {
     animation: fadeIn 2s ease forwards;
 }
 
+
+.logo {
+    display: flex;
+    height: 120px;
+    margin: auto;
+}
+
+
 @keyframes fadeIn {
     from {
         opacity: 0;
