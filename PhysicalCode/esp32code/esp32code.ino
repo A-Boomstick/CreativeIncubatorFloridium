@@ -16,6 +16,8 @@ const byte DNS_PORT = 53;
 // setup prefrences
 Preferences prefrences;
 
+const int buttonPin = 14;
+
 TaskHandle_t POSTTask;
 
 Adafruit_SHT4x sht4 = Adafruit_SHT4x();
@@ -198,13 +200,14 @@ void POSTTaskcode(void* parameter) {
     // vTaskDelay(3600000 / portTICK_PERIOD_MS);
 
     //delay for short time
-    vTaskDelay(14000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(14000));
   }
 }
 
 
 void setup() {
   Serial.begin(115200);
+  pinMode(buttonPin, INPUT_PULLUP);
 
   prefrences.begin("wifi", false);
   //prefrences.clear();
@@ -264,6 +267,8 @@ void setup() {
   }
 }
 
+bool lastBtn = HIGH;
+
 
 void loop() {
 
@@ -272,6 +277,20 @@ void loop() {
     server.handleClient();
     return;
   }
+
+    // Button
+  bool currentBtn = digitalRead(buttonPin);
+
+  if (currentBtn == LOW) {
+    delay(50);
+    
+    Serial.println("Button Pressed! Resetting Details!");
+    prefrences.begin("wifi", false);
+    prefrences.clear();
+    prefrences.end();
+  }
+
+  lastBtn = currentBtn;
 
   //restart esp as a network has been saved
   if (shouldRestart) {
