@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floridium - History</title>
-    <link rel="stylesheet" href="styles/plantsStyles.css">
+    <link rel="stylesheet" href="plantsStyles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="history.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/Assets/favicon.ico">
@@ -13,33 +13,24 @@
 
 <body>
     <header>
-        <section id="titleStrip">
-            <img src="Assets/721a75ada244b9bd4b43b76c9a256412f598e1f7.jfif" alt="">
-            <h1>
-                FLORIDIUM - Plants
-            </h1>
-            <a href="HomepageLink">
-                <button id="logoutBTN">Logout</button>
-            </a>
-        </section>
-        <section id="nav">
-            <a href="HomepageLink">
-                <button id="HomeBTN">Home</button>
-            </a>
-            <a href="AboutUs">
-                <button id="AboutUsBTN">About us</button>
-            </a>
-            <a href="plantsOwned">
-                <button id="YourPlantsBTN">Your plants</button>
-            </a>
-        </section>
+        <img class="logo" src="Assets/Logo_Clear_Bkg.png" alt="Smart Plant Pot">
+        <div class="navigation-bar">
+            <nav class="nav-links">
+                <a href="homepage" class="nav-item">Home</a>
+                <a href="aboutus" class="nav-item">About Us</a>
+                <a href="storepage" class="nav-item">Store Page</a>
+                <a href="plantsOwned" class="nav-item">Your Plant</a>
+
+
+            </nav>
+        </div>
     </header>
     <main>
-        <a href="plantsOwned">
+        <a href="plantsOwned" id="backBTN">
                 <button id="YourPlantsBTN">
                     <img src="Assets/back-arrow.png" alt="">
                 </button>
-            </a>
+        </a>
         <h2>Sunlight</h2>
         <canvas id="SunlightChart"></canvas>
         <h2>Moisture</h2>
