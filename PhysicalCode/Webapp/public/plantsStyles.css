@@ -211,3 +211,8 @@ button:active {
     border-top: 1px solid black;
     border-width: thick;
 }
+
+.identifiers {
+    width: 25px;
+    height: 25px;
+}
