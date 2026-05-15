@@ -134,6 +134,7 @@ function buildSinglePlantFromReadings(readings, boxId) {
     Moisture: [],
     Temprature: [],
     Humidity: [],
+    ReadingTimes: [],
     DateStart: readings[0].reading_time,
   };
 
@@ -142,6 +143,14 @@ function buildSinglePlantFromReadings(readings, boxId) {
     const temp = Number(reading.temperature);
     const sunlight = Number(reading.sunlight_reading);
     const humidity = Number(reading.humidity);
+
+      const formattedTime = new Date(reading.reading_time).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
     if (!Number.isNaN(moisture)) {
       plant.Moisture.push(moisture);
@@ -158,6 +167,8 @@ function buildSinglePlantFromReadings(readings, boxId) {
     if (!Number.isNaN(humidity)) {
       plant.Humidity.push(humidity);
     }
+
+    plant.ReadingTimes.push(formattedTime);
   });
 
   return plant;

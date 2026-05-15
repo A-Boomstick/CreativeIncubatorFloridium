@@ -8,14 +8,6 @@ const loadPlantHistory = async () => {
 
         console.log("Plant data:", plant);
 
-        // Example: display history
-        // document.getElementById("history").innerHTML = `
-        //   <h2>Plant ID: ${plant._id}</h2>
-        //   <p>Moisture history: ${plant.Moisture.join(", ")}</p>
-        //   <p>Sunlight history: ${plant.Sunlight.join(", ")}</p>
-        //   <p>Temperature history: ${plant.Temprature.join(", ")}</p>
-        // `;
-
         moistureChart = null;
         sunlightChart = null;
         temperatureChart = null;
@@ -47,7 +39,7 @@ const loadPlantHistory = async () => {
         sunlightChart = new Chart(Sctx, {
             type: 'line',
             data: {
-                labels: plant.Sunlight.map((_, i) => `Reading ${i + 1}`),
+                labels: plant.ReadingTimes,
                 datasets: [
                     {
                         label: "Sunlight",
@@ -89,7 +81,7 @@ const loadPlantHistory = async () => {
         moistureChart = new Chart(Mctx, {
             type: 'line',
             data: {
-                labels: plant.Moisture.map((_, i) => `Reading ${i + 1}`), // make these timestamps
+                labels: plant.ReadingTimes, // make these timestamps
                 datasets: [
                     {
                         label: "Moisture",
@@ -131,7 +123,7 @@ const loadPlantHistory = async () => {
         temperatureChart = new Chart(Tctx, {
             type: 'line',
             data: {
-                labels: plant.Temprature.map((_, i) => `Reading ${i + 1}`), // make these timestamps
+                labels: plant.ReadingTimes,
                 datasets: [
                     {
                         label: "Temperature",
