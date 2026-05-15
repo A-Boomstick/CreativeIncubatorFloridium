@@ -11,10 +11,13 @@ const loadPlantHistory = async () => {
         moistureChart = null;
         sunlightChart = null;
         temperatureChart = null;
+        humidityChart= null;
+
 
         const Mctx = document.getElementById("MoistureChart").getContext("2d");
         const Sctx = document.getElementById("SunlightChart").getContext("2d");
         const Tctx = document.getElementById("TemperatureChart").getContext("2d");
+        const Hctx = document.getElementById("HumidityChart").getContext("2d");
 
         if (moistureChart) {
             moistureChart.destroy();
@@ -28,6 +31,10 @@ const loadPlantHistory = async () => {
             temperatureChart.destroy();
         }
 
+        if (humidityChart) {
+            humidityChart.destroy();
+        }
+
         // temp stats
         const idealMoistureUpper = 70;
         const idealMoistureLower = 40;
@@ -35,6 +42,8 @@ const loadPlantHistory = async () => {
         const idealTemperatureLower = 15;
         const idealSunlightUpper = 60;
         const idealSunlightLower = 50;
+        const upperIdealHum = 70;
+        const lowerIdealHum = 40;
 
         sunlightChart = new Chart(Sctx, {
             type: 'line',
@@ -161,6 +170,48 @@ const loadPlantHistory = async () => {
                 }
             }
         });
+
+         humidityChart = new Chart(Hctx, {
+            type: 'line',
+            data: {
+                labels: plant.ReadingTimes,
+                datasets: [
+                    {
+                        label: "Humidity",
+                        data: plant.Humidity,
+                        borderColor: "#23dcf5",
+                        backgroundColor: "#23dcf5",
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: "Ideal Humidity Upper bounds",
+                        data: plant.Humidity.map(() => upperIdealHum),
+                        borderColor: "#1b9e26",
+                        backgroundColor: "#1b9e26",
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0
+                    },
+                    {
+                        label: "Ideal Humidity Lower bounds",
+                        data: plant.Humidity.map(() => lowerIdealHum),
+                        borderColor: "#1b9e26",
+                        backgroundColor: "#1b9e26",
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
 
 
     } catch (err) {
