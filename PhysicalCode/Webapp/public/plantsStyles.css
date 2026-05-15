@@ -204,3 +204,10 @@ button:active {
 .thumb-down {
     transform: rotate(180deg) scaleX(-1);
 }
+
+.Divider {
+    padding: 5rem;
+    margin-top: 5rem;
+    border-top: 1px solid black;
+    border-width: thick;
+}
