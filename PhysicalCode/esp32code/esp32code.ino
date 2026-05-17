@@ -17,6 +17,7 @@ const byte DNS_PORT = 53;
 Preferences prefrences;
 
 const int buttonPin = 14;
+const int solarPin = A2;
 
 TaskHandle_t POSTTask;
 
@@ -122,9 +123,19 @@ void postRequest() {
     //Read data
     Serial.println("going to start reading data: ");
 
-    int sunReading = 50;
+    int sunlightTempReading = 0;
+    int sunReading = 0;
+    for (int i = 0; i < 5; i++) {
+    sunlightTempReading += analogRead(solarPin);
+    delay(10);
+    }
+
+    //for testing
+    sunReading = (sunlightTempReading / 5) / 1.8;  
+    Serial.print("sun : ");
+    Serial.println(sunReading);
     
-    // Read the analog value from the soil sensor
+    // Read the analog value from the soil sensor then * 3.3 as 3.3 is sensor max
     int soilReading = analogRead(33);
     soilReading = soilReading / 10;
     Serial.print("soil : ");
