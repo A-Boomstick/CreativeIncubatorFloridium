@@ -1,12 +1,12 @@
 // temp stats
 const idealMoistureUpper = 70;
-const idealMoistureLower = 40;
-const idealTemperatureUpper = 24;
-const idealTemperatureLower = 15
-const idealSunlightUpper = 60;
-const idealSunlightLower = 50;
-const upperIdealHum = 70;
-const lowerIdealHum = 40;
+const idealMoistureLower = 45;
+const idealTemperatureUpper = 28;
+const idealTemperatureLower = 18;
+const idealSunlightUpper = 1700;
+const idealSunlightLower = 500;
+const upperIdealHum = 60;
+const lowerIdealHum = 50;
 
 const inRange = (value, lower, upper) => value >= lower && value <= upper;
 
@@ -53,25 +53,25 @@ const renderPlants = async () => {
 
                         <h3>ID: ${plant._id}</h3>
 
-                        <p>
+                        <p class="stats">
                             <img src="Assets/sunlight.png" alt="" class="identifiers">
                             <strong>Sunlight:</strong> ${latestSun} units
                             <img src="${sunlightStatus.src}" alt="${sunlightStatus.alt}" class="status-icon ${sunlightStatus.className}">
                         </p>
 
-                        <p>
+                        <p class="stats">
                             <img src="Assets/moisture.png" alt="" class="identifiers">
                             <strong>Moisture:</strong> ${latestMoisture}%
                             <img src="${moistureStatus.src}" alt="${moistureStatus.alt}" class="status-icon ${moistureStatus.className}">
                         </p>
 
-                        <p>
+                        <p class="stats">
                             <img src="Assets/temperature.png" alt="" class="identifiers">
                             <strong>Temperature:</strong> ${latestTemp}°C
                             <img src="${tempStatus.src}" alt="${tempStatus.alt}" class="status-icon ${tempStatus.className}">
                         </p>
 
-                        <p>
+                        <p class="stats">
                             <img src="Assets/humidity.png" alt="" class="identifiers">
                             <strong>Humidity:</strong> ${latestHum}%
                             <img src="${humStatus.src}" alt="${humStatus.alt}" class="status-icon ${humStatus.className}"?

@@ -176,6 +176,8 @@ h2 {
     background-color: transparent;
     border: 0px;
     box-shadow: none;
+    justify-self: center;
+    align-self: center;
 }
 
 .PlantTitle button:hover {
@@ -207,6 +209,12 @@ button:active {
 
 #backBTN {
     padding: 0.65rem 1.25rem;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
 }
 
 .status-icon {

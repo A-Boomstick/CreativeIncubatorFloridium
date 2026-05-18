@@ -416,14 +416,14 @@ app.post("/data", async (req, res) => {
     });
 
     // Will eventually make a JSON with the data, time constraints
-    const upperIdealTemp = 24;
-    const lowerIdealTemp = 16;
+    const upperIdealTemp = 28;
+    const lowerIdealTemp = 18;
     const upperIdealMoisture = 70;
     const lowerIdealMoisture = 45;
-    const upperIdealLight = 60;
-    const lowerIdealLight = 50;
-    const upperIdealHum = 70;
-    const lowerIdealHum = 40;
+    const upperIdealLight = 1700;
+    const lowerIdealLight = 500;
+    const upperIdealHum = 60;
+    const lowerIdealHum = 50;
 
     let tempCheck = checkWithinBounds(
       newData.temperature,
