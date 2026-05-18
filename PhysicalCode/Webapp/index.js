@@ -43,6 +43,7 @@ const userPotTableSchema = new mongoose.Schema(
   {
     user_id: String,
     pot_ids: [String],
+    pot_names: [String],
   },
   { collection: "user_pot_table" },
 );
@@ -144,7 +145,7 @@ function buildSinglePlantFromReadings(readings, boxId) {
     const sunlight = Number(reading.sunlight_reading);
     const humidity = Number(reading.humidity);
 
-      const formattedTime = new Date(reading.reading_time).toLocaleString("en-GB", {
+    const formattedTime = new Date(reading.reading_time).toLocaleString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "2-digit",
@@ -352,19 +353,36 @@ app.get("/api/plants/:id", async (req, res) => {
 app.post("/api/addPot", async (req, res) => {
   try {
     const currentUsername = req.session.username || TEMP_TEST_USER;
-    const { potID } = req.body;
+    const { potID, potName } = req.body;
 
-    const updatedDoc = await UserPotTable.findOneAndUpdate(
-      { user_id: currentUsername },
-      { $addToSet: { pot_ids: potID } },
-      { new: true, upsert: true },
-    ).lean();
+    if (!potID || !potName) {
+      return; // add a res msg?
+    }
+
+    let userPotDoc = await UserPotTable.findOne({
+      user_id: currentUsername,
+    });
+
+    if (!userPotDoc) {
+      userPotDoc = new UserPotTable({
+        user_id: currentUsername,
+        pot_ids: [],
+        pot_names: [],
+      })
+    }
+
+    userPotDoc.pot_ids.push(potID);
+    userPotDoc.pot_names.push(potName);
+
+    await userPotDoc.save();
 
     res.json({
       message: "Pot added successfully",
       user: currentUsername,
-      pot_ids: updatedDoc.pot_ids,
+      pot_ids: userPotDoc.pot_ids,
+      pot_names: userPotDoc.pot_names,
     });
+
   } catch (err) {
     console.error("failed to add pot:", err);
     res.status(500).json({ error: "failed to add pot" });

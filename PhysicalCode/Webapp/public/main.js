@@ -108,9 +108,11 @@ PlantList.addEventListener("click", (event) => {
 
 const addPotBTN = document.getElementById("addPotBTN");
 const potIDinput = document.getElementById("potIDinput");
+const potNameinput = document.getElementById("potNameinput");
 
 addPotBTN.addEventListener("click", async () => {
     const potID = potIDinput.value.trim();
+    const potName = potNameinput.value.trim();
 
     try {
         const response = await fetch("/api/addPot", {
@@ -118,12 +120,13 @@ addPotBTN.addEventListener("click", async () => {
             headers: {
                 "content-Type": "application/json"
             },
-            body: JSON.stringify({ potID })
+            body: JSON.stringify({ potID, potName })
         })
 
         const data = await response.json();
 
         potIDinput.value = "";
+        potNameinput.value = "";
 
         renderPlants();
 

@@ -85,6 +85,9 @@ h1 {
 
 .AddPlantPot {
     margin: 20px;
+    display: grid;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .AddPlantPot input {
@@ -93,7 +96,19 @@ h1 {
 }
 
 .AddPlantPot button {
-    padding: 8px 12px;
+    /* padding: 8px 12px; */
+    width: 4rem;
+    height: 4rem;
+    justify-self: center;
+    align-self: center;
+}
+
+.AddPlantPot img {
+    /* padding: 8px 12px; */
+    width: 3.2rem;
+    height: 3.2rem;
+    justify-self: center;
+    align-self: center;
 }
 
 main {
