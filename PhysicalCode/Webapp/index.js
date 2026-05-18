@@ -303,7 +303,17 @@ app.get("/api/plants", async (req, res) => {
 
     const plants = groupPlantsFromReadings(readings);
 
-    res.json(plants);
+    const plantsNames = plants.map((plant) => {
+      const potNo = userPotDoc.pot_ids.indexOf(plant.box_id);
+
+      return {
+        ...plant,
+        plant_name: userPotDoc.pot_names[potNo] || plant.box_id,
+      };
+    });
+
+    res.json(plantsNames);
+
   } catch (err) {
     console.error("Fetch plants error:", err);
     res.status(500).json({ error: "Failed to fetch plants" });

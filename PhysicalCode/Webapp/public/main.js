@@ -45,7 +45,7 @@ const renderPlants = async () => {
                     <img src="Assets/721a75ada244b9bd4b43b76c9a256412f598e1f7.jfif" alt="Plant Image">
                     <div class="PlantDetails">
                         <div class="PlantTitle">
-                            <h2>PLANT ${index + 1}</h2>
+                            <h2>${plant.plant_name || `PLANT ${index + 1}`}</h2>
                             <button id="${plant._id}">
                                 <img src="Assets/history.png" alt="">
                             </button>
