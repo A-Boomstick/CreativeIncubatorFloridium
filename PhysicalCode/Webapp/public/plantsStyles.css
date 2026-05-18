@@ -214,7 +214,35 @@ button:active {
 .stats {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 2rem;
+}
+
+.statAdvice {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-weight: 500;
+}
+
+.statAdvice.good {
+    background-color: #e7f7ea;
+    color: #1b7f32;
+}
+
+.statAdvice.minor {
+    background-color: #fff8db;
+    color: #8a6d00;
+}
+
+.statAdvice.major {
+    background-color: #ffe8cc;
+    color: #9a4d00;
+}
+
+.statAdvice.extreme {
+    background-color: #ffe0e0;
+    color: #a30000;
 }
 
 .status-icon {
@@ -222,10 +250,6 @@ button:active {
     height: 20px;
     margin-left: 8px;
     vertical-align: middle;
-}
-
-.thumb-down {
-    transform: rotate(180deg) scaleX(-1);
 }
 
 .Divider {

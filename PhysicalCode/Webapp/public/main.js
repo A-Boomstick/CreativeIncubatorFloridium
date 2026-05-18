@@ -8,15 +8,48 @@ const idealSunlightLower = 500;
 const upperIdealHum = 60;
 const lowerIdealHum = 50;
 
-const inRange = (value, lower, upper) => value >= lower && value <= upper;
+const getStatusIcon = (value, lower, upper, label, unit) => {
 
-const getStatusIcon = (value, lower, upper) => {
-    const ok = inRange(value, lower, upper);
+    if (value >= lower && value <= upper) {
+        return {
+            src: "Assets/like.png",
+            alt: `${label} is within ideal range`,
+            tooltip: `${label} is within the ideal range.`,
+            advice: "no action needed",
+            severity: "good"
+        };
+    }
+
+    let difference;
+    let change;
+
+    if (value < lower) {
+        difference = lower - value;
+        change = "increase";
+    } else {
+        difference = value - upper;
+        change = "decrease";
+    }
+
+    const differencePercentage = (difference / (upper - lower)) * 100;
+
+    if (differencePercentage <= 20) {
+        severity = "minor";
+        advice = `Slightly ${change} ${label.toLowerCase()} by about ${difference.toFixed(1)}${unit}.`;
+    } else if (differencePercentage <= 40) {
+        severity = "major";
+        advice = `${label} needs adjusting. Try to ${change} it by about ${difference.toFixed(1)}${unit}.`;
+    } else {
+        severity = "extreme";
+        advice = `${label} is far outside the ideal range. ${change === "increase" ? "Increase" : "Decrease"} it immediately by about ${difference.toFixed(1)}${unit}.`;
+    }
 
     return {
-        src: "Assets/like.png",
-        className: ok ? "thumb-up" : "thumb-down",
-        alt: ok ? "Within ideal range" : "Outside ideal range"
+        src: "Assets/warning.png",
+        alt: `${label} isn't within ideal range`,
+        tooltip: `${label} isn't within the ideal range.`,
+        advice,
+        severity
     };
 };
 
@@ -35,10 +68,10 @@ const renderPlants = async () => {
             const latestTemp = plant.Temprature[plant.Temprature.length - 1];
             const latestHum = plant.Humidity[plant.Humidity.length - 1];
 
-            const moistureStatus = getStatusIcon(latestMoisture, idealMoistureLower, idealMoistureUpper);
-            const sunlightStatus = getStatusIcon(latestSun, idealSunlightLower, idealSunlightUpper);
-            const tempStatus = getStatusIcon(latestTemp, idealTemperatureLower, idealTemperatureUpper);
-            const humStatus = getStatusIcon(latestHum, lowerIdealHum, upperIdealHum);
+            const moistureStatus = getStatusIcon(latestMoisture, idealMoistureLower, idealMoistureUpper, "Moisture", "%");
+            const sunlightStatus = getStatusIcon(latestSun, idealSunlightLower, idealSunlightUpper, "Sunlight", "units");
+            const tempStatus = getStatusIcon(latestTemp, idealTemperatureLower, idealTemperatureUpper, "Temperature", "°C");
+            const humStatus = getStatusIcon(latestHum, lowerIdealHum, upperIdealHum, "Humidity", "%");
 
             output += `
                 <section class="PlantContainer">
@@ -53,28 +86,32 @@ const renderPlants = async () => {
 
                         <h3>ID: ${plant._id}</h3>
 
-                        <p class="stats">
+                        <p class="stats" title="${sunlightStatus.tooltip}">
                             <img src="Assets/sunlight.png" alt="" class="identifiers">
                             <strong>Sunlight:</strong> ${latestSun} units
-                            <img src="${sunlightStatus.src}" alt="${sunlightStatus.alt}" class="status-icon ${sunlightStatus.className}">
+                            <img src="${sunlightStatus.src}" alt="${sunlightStatus.alt}" class="status-icon">
+                            <span class="statAdvice ${sunlightStatus.severity}">${sunlightStatus.advice}</span>
                         </p>
 
-                        <p class="stats">
+                        <p class="stats" title="${moistureStatus.tooltip}">
                             <img src="Assets/moisture.png" alt="" class="identifiers">
                             <strong>Moisture:</strong> ${latestMoisture}%
-                            <img src="${moistureStatus.src}" alt="${moistureStatus.alt}" class="status-icon ${moistureStatus.className}">
+                            <img src="${moistureStatus.src}" alt="${moistureStatus.alt}" class="status-icon">
+                            <span class="statAdvice ${moistureStatus.severity}">${moistureStatus.advice}</span>
                         </p>
 
-                        <p class="stats">
+                        <p class="stats" title="${tempStatus.tooltip}">
                             <img src="Assets/temperature.png" alt="" class="identifiers">
                             <strong>Temperature:</strong> ${latestTemp}°C
-                            <img src="${tempStatus.src}" alt="${tempStatus.alt}" class="status-icon ${tempStatus.className}">
+                            <img src="${tempStatus.src}" alt="${tempStatus.alt}" class="status-icon">
+                            <span class="statAdvice ${tempStatus.severity}">${tempStatus.advice}</span>
                         </p>
 
-                        <p class="stats">
+                        <p class="stats" title="${humStatus.tooltip}">
                             <img src="Assets/humidity.png" alt="" class="identifiers">
                             <strong>Humidity:</strong> ${latestHum}%
-                            <img src="${humStatus.src}" alt="${humStatus.alt}" class="status-icon ${humStatus.className}"?
+                            <img src="${humStatus.src}" alt="${humStatus.alt}" class="status-icon">
+                            <span class="statAdvice ${humStatus.severity}">${humStatus.advice}</span>
                         </p>
 
                         <p><strong>Started:</strong> ${plant.DateStart}</p>
