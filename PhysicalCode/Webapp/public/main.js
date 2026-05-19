@@ -22,6 +22,8 @@ const getStatusIcon = (value, lower, upper, label, unit) => {
 
     let difference;
     let change;
+    let severity;
+    let advice;
 
     if (value < lower) {
         difference = lower - value;
@@ -75,7 +77,14 @@ const renderPlants = async () => {
 
             output += `
                 <section class="PlantContainer">
-                    <img src="Assets/721a75ada244b9bd4b43b76c9a256412f598e1f7.jfif" alt="Plant Image">
+                    <div class="DynamicPlant">
+                        <img src="Assets/plantPot.png" alt="Plant Image" class="pot">
+
+                        <img src="${sunlightStatus.src}" alt="${sunlightStatus.alt}" class="SunstatIMG" title="${sunlightStatus.tooltip}">
+                        <img src="${moistureStatus.src}" alt="${moistureStatus.alt}" class="MoiststatIMG" title="${moistureStatus.tooltip}">
+                        <img src="${tempStatus.src}" alt="${tempStatus.alt}" class="TempstatIMG" title="${tempStatus.tooltip}">
+                        <img src="${humStatus.src}" alt="${humStatus.alt}" class="HumstatIMG" title="${humStatus.tooltip}">
+                    </div>
                     <div class="PlantDetails">
                         <div class="PlantTitle">
                             <h2>${plant.plant_name || `PLANT ${index + 1}`}</h2>

@@ -128,7 +128,7 @@ main img {
 
 .PlantContainer {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 5fr;
     border-bottom: 1px solid black;
     padding-top: 100px;
     padding-bottom: 100px;
@@ -137,6 +137,65 @@ main img {
 .PlantContainer img {
     justify-self: center;
     align-self: center;
+}
+
+.DynamicPlant {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    justify-self: center;
+    align-self: center;
+}
+
+.pot {
+    /* width: 10rem;
+    height: 10rem; */
+    width: 160px;
+    height: auto;
+    display: block;
+    /* z-index: 1; */
+    opacity: 0.5;
+}
+
+.SunstatIMG {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    z-index: 2;
+    top: 32px;
+    right: 80px;
+}
+
+.MoiststatIMG {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    z-index: 2;
+    bottom: 40px;
+    right: 120px;
+}
+
+.TempstatIMG {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    z-index: 2;
+    bottom: 80px;
+    left: 120px;
+}
+
+.HumstatIMG {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    z-index: 2;
+    left: 30px;
+    top: 60px;
 }
 
 .PlantDetails {
