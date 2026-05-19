@@ -111,6 +111,27 @@ h1 {
     align-self: center;
 }
 
+.PromotionBanner {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: #FDF2F5;
+}
+
+.PromotionBanner p {
+    font-weight: bolder;
+    font-size: large;
+    border: 1px solid #222;
+    border-radius: 50px;
+    padding: 1.5rem;
+    background-color: #cbffba;
+}
+
+#timer {
+    color: #a30000;
+    font-weight: bolder;
+}
+
 main {
     display: grid;
     grid-template-columns: 1fr;
