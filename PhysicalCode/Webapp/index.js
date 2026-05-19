@@ -384,7 +384,7 @@ app.post("/data", async (req, res) => {
       soil_moisture: req.body.soil_moisture,
       temperature: req.body.temperature,
       humidity: req.body.humidity,
-      sunlight: req.body.sunlight,
+      sunlight: req.body.sunlight_reading,
     });
 
     // Will eventually make a JSON with the data, time constraints
