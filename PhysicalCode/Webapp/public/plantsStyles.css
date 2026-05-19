@@ -85,6 +85,9 @@ h1 {
 
 .AddPlantPot {
     margin: 20px;
+    display: grid;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .AddPlantPot input {
@@ -93,7 +96,19 @@ h1 {
 }
 
 .AddPlantPot button {
-    padding: 8px 12px;
+    /* padding: 8px 12px; */
+    width: 4rem;
+    height: 4rem;
+    justify-self: center;
+    align-self: center;
+}
+
+.AddPlantPot img {
+    /* padding: 8px 12px; */
+    width: 3.2rem;
+    height: 3.2rem;
+    justify-self: center;
+    align-self: center;
 }
 
 main {
@@ -161,6 +176,8 @@ h2 {
     background-color: transparent;
     border: 0px;
     box-shadow: none;
+    justify-self: center;
+    align-self: center;
 }
 
 .PlantTitle button:hover {
@@ -194,15 +211,45 @@ button:active {
     padding: 0.65rem 1.25rem;
 }
 
+.stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.statAdvice {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-weight: 500;
+}
+
+.statAdvice.good {
+    background-color: #e7f7ea;
+    color: #1b7f32;
+}
+
+.statAdvice.minor {
+    background-color: #fff8db;
+    color: #8a6d00;
+}
+
+.statAdvice.major {
+    background-color: #ffe8cc;
+    color: #9a4d00;
+}
+
+.statAdvice.extreme {
+    background-color: #ffe0e0;
+    color: #a30000;
+}
+
 .status-icon {
     width: 20px;
     height: 20px;
     margin-left: 8px;
     vertical-align: middle;
-}
-
-.thumb-down {
-    transform: rotate(180deg) scaleX(-1);
 }
 
 .Divider {

@@ -11,7 +11,7 @@ const loadPlantHistory = async () => {
         moistureChart = null;
         sunlightChart = null;
         temperatureChart = null;
-        humidityChart= null;
+        humidityChart = null;
 
 
         const Mctx = document.getElementById("MoistureChart").getContext("2d");
@@ -37,13 +37,13 @@ const loadPlantHistory = async () => {
 
         // temp stats
         const idealMoistureUpper = 70;
-        const idealMoistureLower = 40;
-        const idealTemperatureUpper = 24;
-        const idealTemperatureLower = 15;
-        const idealSunlightUpper = 60;
-        const idealSunlightLower = 50;
-        const upperIdealHum = 70;
-        const lowerIdealHum = 40;
+        const idealMoistureLower = 45;
+        const idealTemperatureUpper = 28;
+        const idealTemperatureLower = 18;
+        const idealSunlightUpper = 1700;
+        const idealSunlightLower = 500;
+        const upperIdealHum = 60;
+        const lowerIdealHum = 50;
 
         sunlightChart = new Chart(Sctx, {
             type: 'line',
@@ -171,7 +171,7 @@ const loadPlantHistory = async () => {
             }
         });
 
-         humidityChart = new Chart(Hctx, {
+        humidityChart = new Chart(Hctx, {
             type: 'line',
             data: {
                 labels: plant.ReadingTimes,
